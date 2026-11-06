@@ -1,0 +1,16 @@
+﻿--- F-01 RED run (captured before implementation) ---
+ RUN  v5.1.0 C:/Users/imano/A4D-Event-Registration
+
+ FAIL  tests/unit/auth-unit.test.ts
+Error: Cannot find module '../../src/server/auth/token' imported from
+C:/Users/imano/A4D-Event-Registration/tests/unit/auth-unit.test.ts
+ at tests/unit/auth-unit.test.ts:2:1
+
+ FAIL  tests/integration/auth.test.ts
+Error: Cannot find module '../../src/server/app' imported from
+C:/Users/imano/A4D-Event-Registration/tests/integration/auth.test.ts
+
+ Test Files  2 failed (2)
+      Tests  no tests
+   Start at  00:46:57
+   Duration  2.12s
