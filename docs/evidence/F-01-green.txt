@@ -1,0 +1,43 @@
+﻿--- F-01 GREEN run ---
+ RUN  v5.1.0 C:/Users/imano/A4D-Event-Registration
+
+ ✓ tests/unit/auth-unit.test.ts (5 tests) 139ms
+   ✓ TEST-101 / AC-109: generateSessionToken (2)
+     ✓ produces a 64-character hexadecimal string
+     ✓ generates 1000 unique tokens
+   ✓ TEST-102 / AC-111: requireRole middleware (3)
+     ✓ calls next() when the user role is in the allowed list
+     ✓ passes a 403 error when the role is not allowed
+     ✓ passes a 401 error when there is no user
+
+ ✓ tests/integration/auth.test.ts (18 tests) 4630ms
+   ✓ TEST-103 / AC-101, AC-109: valid login (1)
+     ✓ returns 200 with id/email/role and sets an httpOnly sid cookie 1344ms
+   ✓ TEST-104 / AC-102: wrong password (1)
+     ✓ returns 401 INVALID_CREDENTIALS and no cookie
+   ✓ TEST-105 / AC-103: unknown email (1)
+     ✓ returns the same 401 body as a wrong password
+   ✓ TEST-106 / AC-104: validation errors (5)
+     ✓ returns 400 VALIDATION_ERROR for body {} (and 4 more cases)
+   ✓ TEST-107 / AC-113: email normalisation (1)
+     ✓ accepts upper-case email and surrounding spaces 515ms
+   ✓ TEST-108 / AC-105: GET /api/auth/me with valid cookie (1)
+     ✓ returns 200 with the session user identity 335ms
+   ✓ TEST-109 / AC-106, AC-114: unauthenticated /me (2)
+     ✓ returns 401 without a cookie
+     ✓ returns 401 with a garbage cookie value
+   ✓ TEST-110 / AC-107: logout and old cookie reuse (1)
+     ✓ 204 on logout; old cookie gets 401; second logout is 204 561ms
+   ✓ TEST-111 / AC-108: expired session deleted on use (1)
+     ✓ returns 401 and removes the expired row
+   ✓ TEST-112 / AC-110: password storage and responses (3)
+     ✓ stored hash starts with $argon2id$
+     ✓ login response contains no passwordHash 480ms
+     ✓ /me response contains no passwordHash
+   ✓ TEST-113 / AC-112: client-supplied identity ignored (1)
+     ✓ ignores X-User-Role header and query userId 308ms
+
+ Test Files  2 passed (2)
+      Tests  23 passed (23)
+   Start at  00:49:56
+   Duration  18.09s
