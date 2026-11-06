@@ -1,0 +1,89 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.1.0 [39m[90m/home/xavier/repoGIT/A4D-Event-Registration[39m
+
+ [32m✓[39m tests/integration/event-constraints.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 118[2mms[22m[39m
+ [31m❯[39m tests/unit/event-rules.test.ts [2m([22m[2m11 tests[22m[2m | [22m[31m8 failed[39m[2m)[22m[32m 19[2mms[22m[39m
+   [31m❯[39m TEST-201 / AC-202: capacity validation (BR-01) [2m(9)[22m
+[31m     [31m×[31m rejects capacity 0[39m[32m 10[2mms[22m[39m
+[31m     [31m×[31m rejects capacity -1[39m[32m 1[2mms[22m[39m
+[31m     [31m×[31m rejects capacity 1.5[39m[32m 1[2mms[22m[39m
+[31m     [31m×[31m rejects capacity 10[39m[32m 1[2mms[22m[39m
+[31m     [31m×[31m rejects capacity undefined[39m[32m 1[2mms[22m[39m
+[31m     [31m×[31m rejects capacity 10001[39m[32m 1[2mms[22m[39m
+     [32m✓[39m accepts capacity 1[32m 0[2mms[22m[39m
+     [32m✓[39m accepts capacity 10000[32m 0[2mms[22m[39m
+[31m     [31m×[31m rejects an empty title and an invalid date (AC-203)[39m[32m 1[2mms[22m[39m
+   [31m❯[39m TEST-202 / AC-207: publication date rule (BR-02) [2m(2)[22m
+     [32m✓[39m refuses when now equals or is after startsAt[32m 0[2mms[22m[39m
+[31m     [31m×[31m accepts when now is one second before startsAt[39m[32m 1[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 8 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m tests/unit/event-rules.test.ts[2m > [22mTEST-201 / AC-202: capacity validation (BR-01)[2m > [22mrejects capacity 0
+[41m[1m FAIL [22m[49m tests/unit/event-rules.test.ts[2m > [22mTEST-201 / AC-202: capacity validation (BR-01)[2m > [22mrejects capacity -1
+[41m[1m FAIL [22m[49m tests/unit/event-rules.test.ts[2m > [22mTEST-201 / AC-202: capacity validation (BR-01)[2m > [22mrejects capacity 1.5
+[41m[1m FAIL [22m[49m tests/unit/event-rules.test.ts[2m > [22mTEST-201 / AC-202: capacity validation (BR-01)[2m > [22mrejects capacity 10
+[41m[1m FAIL [22m[49m tests/unit/event-rules.test.ts[2m > [22mTEST-201 / AC-202: capacity validation (BR-01)[2m > [22mrejects capacity undefined
+[41m[1m FAIL [22m[49m tests/unit/event-rules.test.ts[2m > [22mTEST-201 / AC-202: capacity validation (BR-01)[2m > [22mrejects capacity 10001
+[31m[1mAssertionError[22m: expected true to be false // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+[36m [2m❯[22m tests/unit/event-rules.test.ts:[2m8:72[22m[39m
+    [90m  6|[39m [34mdescribe[39m([32m"TEST-201 / AC-202: capacity validation (BR-01)"[39m[33m,[39m () [33m=>[39m {
+    [90m  7|[39m   it.each([0, -1, 1.5, "10", undefined, 10001])("rejects capacity %s",…
+    [90m  8|[39m     expect(createEventSchema.safeParse({ ...base, capacity }).success)…
+    [90m   |[39m                                                                        [31m^[39m
+    [90m  9|[39m   })[33m;[39m
+    [90m 10|[39m   it[33m.[39m[34meach[39m([[34m1[39m[33m,[39m [34m10000[39m])([32m"accepts capacity %s"[39m[33m,[39m (capacity) [33m=>[39m {
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/event-rules.test.ts[2m > [22mTEST-201 / AC-202: capacity validation (BR-01)[2m > [22mrejects an empty title and an invalid date (AC-203)
+[31m[1mAssertionError[22m: expected true to be false // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- false[39m
+[31m+ true[39m
+
+[36m [2m❯[22m tests/unit/event-rules.test.ts:[2m14:88[22m[39m
+    [90m 12|[39m   })[33m;[39m
+    [90m 13|[39m   [34mit[39m([32m"rejects an empty title and an invalid date (AC-203)"[39m[33m,[39m () [33m=>[39m {
+    [90m 14|[39m     expect(createEventSchema.safeParse({ ...base, title: "  ", capacit…
+    [90m   |[39m                                                                                        [31m^[39m
+    [90m 15|[39m     expect(createEventSchema.safeParse({ ...base, startsAt: "not-a-dat…
+    [90m 16|[39m   })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/event-rules.test.ts[2m > [22mTEST-202 / AC-207: publication date rule (BR-02)[2m > [22maccepts when now is one second before startsAt
+[31m[1mAssertionError[22m: expected false to be true // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- true[39m
+[31m+ false[39m
+
+[36m [2m❯[22m tests/unit/event-rules.test.ts:[2m26:72[22m[39m
+    [90m 24|[39m   })[33m;[39m
+    [90m 25|[39m   [34mit[39m([32m"accepts when now is one second before startsAt"[39m[33m,[39m () [33m=>[39m {
+    [90m 26|[39m     expect(canPublish({ startsAt }, new Date("2027-01-01T09:59:59Z")))…
+    [90m   |[39m                                                                        [31m^[39m
+    [90m 27|[39m   })[33m;[39m
+    [90m 28|[39m })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/8]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[31m8 failed[39m[22m[2m | [22m[1m[32m4 passed[39m[22m[90m (12)[39m
+[2m   Start at [22m 20:54:11
+[2m   Duration [22m 652ms[2m (tests 44%, import 33%, transform 10%, setup 9%, worker 3%)[22m
+
