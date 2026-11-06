@@ -1,0 +1,23 @@
+﻿--- F-06 RED run (endpoint /api/events/:id/registrations not yet implemented) ---
+ RUN  v5.1.0 C:/Users/imano/A4D-Event-Registration
+
+ ❯ tests/integration/organizer-view.test.ts (8 tests | 6 failed) 9265ms
+   ❯ TEST-601 / AC-601: owner lists registrations of own event (1)
+     × returns 200 with all registrations, participant email, ordered by createdAt 860ms
+   ❯ TEST-602 / AC-602: empty registrations (1)
+     × returns 200 with empty registrations and confirmedCount 0 1348ms
+   ✓ TEST-603 / AC-603: other organizer gets 404 (1)
+   ❯ TEST-604 / AC-604: participant gets 403 (1)
+     × returns 403 for participant callers (received 404 route not found)
+   ❯ TEST-605 / AC-605: anonymous gets 401 (1)
+     × returns 401 when unauthenticated (received 404 route not found)
+   ✓ TEST-606 / AC-606: unknown or malformed id (1)
+   ❯ TEST-607 / AC-607: registration isolation between events (1)
+     × returns only registrations of the requested event
+   ❯ TEST-608 / AC-608: no extra private fields on participant (1)
+     × exposes only id and email on participant
+
+ Test Files  1 failed (1)
+      Tests  6 failed | 2 passed (8)
+   Start at  00:58:45
+   Duration  11.10s
