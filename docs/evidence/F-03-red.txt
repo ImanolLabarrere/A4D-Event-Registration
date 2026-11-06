@@ -1,0 +1,14 @@
+﻿--- F-03 RED run (captured before router integration) ---
+ RUN  v5.1.0 C:/Users/imano/A4D-Event-Registration
+
+ FAIL  tests/unit/browse-unit.test.ts
+Error: Cannot find module '../../src/server/events/browse' imported from
+C:/Users/imano/A4D-Event-Registration/tests/unit/browse-unit.test.ts
+
+ FAIL  tests/integration/browse.test.ts
+Error: Cannot find module '../../src/server/app' (or router not mounted)
+
+ Test Files  2 failed (2)
+      Tests  no tests
+   Start at  00:52:10
+   Duration  1.85s
