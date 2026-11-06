@@ -61,12 +61,61 @@ eventsRouter.get("/", async (req, res) => {
 });
 
 // ---------------------------------------------------------------------------
+// GET /api/events/:id/registrations — organizer only, own event only (F-06 / BR-07)
+// MUST be declared before /:id to avoid being shadowed
+// ---------------------------------------------------------------------------
+eventsRouter.get("/:id/registrations", requireRole("ORGANIZER"), async (req, res) => {
+  const { id } = req.params;
+
+  // Retrieve event; return 404 for unknown or malformed id
+  const event = await db.event.findUnique({
+    where: { id },
+    include: {
+      registrations: {
+        where: { status: "CONFIRMED" },
+        orderBy: { createdAt: "asc" },
+        include: {
+          user: {
+            select: { id: true, email: true },
+          },
+        },
+      },
+    },
+  }).catch(() => null);
+
+  // BR-07: another organizer's event is indistinguishable from nonexistent (404)
+  if (!event || event.organizerId !== req.user!.id) {
+    res.status(404).json({ error: { code: "NOT_FOUND", message: "Event not found." } });
+    return;
+  }
+
+  res.status(200).json({
+    event: {
+      id: event.id,
+      title: event.title,
+      startsAt: event.startsAt,
+      capacity: event.capacity,
+    },
+    confirmedCount: event.registrations.length,
+    registrations: event.registrations.map((r) => ({
+      id: r.id,
+      status: r.status,
+      createdAt: r.createdAt,
+      participant: {
+        id: r.user.id,
+        email: r.user.email,
+      },
+    })),
+  });
+});
+
+// ---------------------------------------------------------------------------
 // GET /api/events/:id — authenticated users
 // Draft: visible only to its owner organizer; anyone else gets 404 (BR-06)
 // ---------------------------------------------------------------------------
 eventsRouter.get("/:id", async (req, res) => {
   const { id } = req.params;
-  const event = await db.event.findUnique({ where: { id }, include: withRegistrations });
+  const event = await db.event.findUnique({ where: { id }, include: withRegistrations }).catch(() => null);
 
   if (!event) {
     res.status(404).json({ error: { code: "NOT_FOUND", message: "Event not found." } });
@@ -83,4 +132,3 @@ eventsRouter.get("/:id", async (req, res) => {
 
   res.json(formatEvent(event));
 });
-
