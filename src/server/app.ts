@@ -3,6 +3,7 @@ import cookieParser from "cookie-parser";
 import { authRouter } from "./auth/router";
 import { eventsRouter } from "./events/router";
 import { manageRouter } from "./events/manage";
+import { registrationsRouter } from "./registrations/router";
 
 export const app = express();
 
@@ -15,6 +16,7 @@ app.use(cookieParser());
 app.use("/api/auth", authRouter);
 app.use("/api/events", eventsRouter);
 app.use("/api/events", manageRouter);
+app.use("/api/events", registrationsRouter);
 
 // ---------------------------------------------------------------------------
 // Generic error handler (used by next(err) calls)
