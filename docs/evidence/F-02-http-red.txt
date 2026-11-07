@@ -1,0 +1,216 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.1.0 [39m[90m/home/xavier/repoGIT/A4D-Event-Registration[39m
+
+ [31m❯[39m tests/integration/events-manage.test.ts [2m([22m[2m16 tests[22m[2m | [22m[31m13 failed[39m[2m)[22m[33m 677[2mms[22m[39m
+   [31m❯[39m TEST-203 / AC-201: organizer creates a draft event [2m(1)[22m
+[31m     [31m×[31m returns 201, DRAFT, owned by the caller, and the row is persisted[39m[32m 24[2mms[22m[39m
+   [31m❯[39m TEST-204 / AC-202: invalid capacity [2m(5)[22m
+[31m     [31m×[31m returns 400 and stores nothing for capacity 0[39m[32m 9[2mms[22m[39m
+[31m     [31m×[31m returns 400 and stores nothing for capacity -1[39m[32m 7[2mms[22m[39m
+[31m     [31m×[31m returns 400 and stores nothing for capacity 1.5[39m[32m 6[2mms[22m[39m
+[31m     [31m×[31m returns 400 and stores nothing for capacity 10[39m[32m 6[2mms[22m[39m
+[31m     [31m×[31m returns 400 and stores nothing for capacity null[39m[32m 8[2mms[22m[39m
+   [31m❯[39m TEST-205 / AC-203: invalid title or date [2m(1)[22m
+[31m     [31m×[31m returns 400 for an empty title and for an invalid date[39m[32m 10[2mms[22m[39m
+   [31m❯[39m TEST-206 / AC-204: participant cannot create an event [2m(1)[22m
+[31m     [31m×[31m returns 403 and stores nothing[39m[32m 6[2mms[22m[39m
+   [32m✓[39m TEST-207 / AC-205: anonymous cannot create an event [2m(1)[22m
+     [32m✓[39m returns 401 without private data[32m 68[2mms[22m[39m
+   [31m❯[39m TEST-208 / AC-206: owner publishes a draft with a future date [2m(1)[22m
+[31m     [31m×[31m returns 200, PUBLISHED, persisted[39m[32m 22[2mms[22m[39m
+   [31m❯[39m TEST-209 / AC-207: publishing an event whose date has passed [2m(1)[22m
+[31m     [31m×[31m returns 409 EVENT_IN_PAST and the event stays DRAFT[39m[32m 8[2mms[22m[39m
+   [31m❯[39m TEST-210 / AC-208: publishing an already published event [2m(1)[22m
+[31m     [31m×[31m returns 409 ALREADY_PUBLISHED[39m[32m 9[2mms[22m[39m
+   [32m✓[39m TEST-211 / AC-209: another organizer's event (ownership, BR-07) [2m(1)[22m
+     [32m✓[39m returns 404 and leaves the event DRAFT[32m 10[2mms[22m[39m
+   [31m❯[39m TEST-212 / AC-210: participant cannot publish [2m(1)[22m
+[31m     [31m×[31m returns 403 and leaves the event DRAFT[39m[32m 7[2mms[22m[39m
+   [32m✓[39m TEST-213 / AC-211: unknown or malformed id [2m(1)[22m
+     [32m✓[39m returns 404 for a random UUID and for 'abc'[32m 9[2mms[22m[39m
+   [31m❯[39m TEST-215 / AC-213: server-owned fields in the body are ignored [2m(1)[22m
+[31m     [31m×[31m creates a DRAFT owned by the caller even if organizerId and status are sent[39m[32m 6[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 13 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m tests/integration/events-manage.test.ts[2m > [22mTEST-203 / AC-201: organizer creates a draft event[2m > [22mreturns 201, DRAFT, owned by the caller, and the row is persisted
+[31m[1mAssertionError[22m: expected 404 to be 201 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 201[39m
+[31m+ 404[39m
+
+[36m [2m❯[22m tests/integration/events-manage.test.ts:[2m61:24[22m[39m
+    [90m 59|[39m     const res = await request(app).post("/api/events").set("Cookie", o…
+    [90m 60|[39m       [33m.[39m[34msend[39m({ title[33m,[39m startsAt[33m:[39m [34mfuture[39m()[33m,[39m capacity[33m:[39m [34m5[39m })[33m;[39m
+    [90m 61|[39m     [34mexpect[39m(res[33m.[39mstatus)[33m.[39m[34mtoBe[39m([34m201[39m)[33m;[39m
+    [90m   |[39m                        [31m^[39m
+    [90m 62|[39m     createdIds[33m.[39m[34mpush[39m(res[33m.[39mbody[33m.[39mid)[33m;[39m
+    [90m 63|[39m     [34mexpect[39m(res[33m.[39mbody[33m.[39mstatus)[33m.[39m[34mtoBe[39m([32m"DRAFT"[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/13]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/integration/events-manage.test.ts[2m > [22mTEST-204 / AC-202: invalid capacity[2m > [22mreturns 400 and stores nothing for capacity 0
+[41m[1m FAIL [22m[49m tests/integration/events-manage.test.ts[2m > [22mTEST-204 / AC-202: invalid capacity[2m > [22mreturns 400 and stores nothing for capacity -1
+[41m[1m FAIL [22m[49m tests/integration/events-manage.test.ts[2m > [22mTEST-204 / AC-202: invalid capacity[2m > [22mreturns 400 and stores nothing for capacity 1.5
+[41m[1m FAIL [22m[49m tests/integration/events-manage.test.ts[2m > [22mTEST-204 / AC-202: invalid capacity[2m > [22mreturns 400 and stores nothing for capacity 10
+[41m[1m FAIL [22m[49m tests/integration/events-manage.test.ts[2m > [22mTEST-204 / AC-202: invalid capacity[2m > [22mreturns 400 and stores nothing for capacity null
+[31m[1mAssertionError[22m: expected 404 to be 400 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 400[39m
+[31m+ 404[39m
+
+[36m [2m❯[22m tests/integration/events-manage.test.ts:[2m77:24[22m[39m
+    [90m 75|[39m     const res = await request(app).post("/api/events").set("Cookie", o…
+    [90m 76|[39m       [33m.[39m[34msend[39m({ title[33m,[39m startsAt[33m:[39m [34mfuture[39m()[33m,[39m capacity })[33m;[39m
+    [90m 77|[39m     [34mexpect[39m(res[33m.[39mstatus)[33m.[39m[34mtoBe[39m([34m400[39m)[33m;[39m
+    [90m   |[39m                        [31m^[39m
+    [90m 78|[39m     [34mexpect[39m(res[33m.[39mbody[33m.[39merror[33m.[39mcode)[33m.[39m[34mtoBe[39m([32m"VALIDATION_ERROR"[39m)[33m;[39m
+    [90m 79|[39m     [34mexpect[39m([35mawait[39m prisma[33m.[39mevent[33m.[39m[34mcount[39m({ where[33m:[39m { title } }))[33m.[39m[34mtoBe[39m([34m0[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/13]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/integration/events-manage.test.ts[2m > [22mTEST-205 / AC-203: invalid title or date[2m > [22mreturns 400 for an empty title and for an invalid date
+[31m[1mAssertionError[22m: expected 404 to be 400 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 400[39m
+[31m+ 404[39m
+
+[36m [2m❯[22m tests/integration/events-manage.test.ts:[2m89:22[22m[39m
+    [90m 87|[39m     const b = await request(app).post("/api/events").set("Cookie", org…
+    [90m 88|[39m       .send({ title: tag("t205"), startsAt: "not-a-date", capacity: 5 …
+    [90m 89|[39m     [34mexpect[39m(a[33m.[39mstatus)[33m.[39m[34mtoBe[39m([34m400[39m)[33m;[39m
+    [90m   |[39m                      [31m^[39m
+    [90m 90|[39m     [34mexpect[39m(b[33m.[39mstatus)[33m.[39m[34mtoBe[39m([34m400[39m)[33m;[39m
+    [90m 91|[39m   })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/13]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/integration/events-manage.test.ts[2m > [22mTEST-206 / AC-204: participant cannot create an event[2m > [22mreturns 403 and stores nothing
+[31m[1mAssertionError[22m: expected 404 to be 403 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 403[39m
+[31m+ 404[39m
+
+[36m [2m❯[22m tests/integration/events-manage.test.ts:[2m99:24[22m[39m
+    [90m 97|[39m     const res = await request(app).post("/api/events").set("Cookie", p…
+    [90m 98|[39m       [33m.[39m[34msend[39m({ title[33m,[39m startsAt[33m:[39m [34mfuture[39m()[33m,[39m capacity[33m:[39m [34m5[39m })[33m;[39m
+    [90m 99|[39m     [34mexpect[39m(res[33m.[39mstatus)[33m.[39m[34mtoBe[39m([34m403[39m)[33m;[39m
+    [90m   |[39m                        [31m^[39m
+    [90m100|[39m     [34mexpect[39m([35mawait[39m prisma[33m.[39mevent[33m.[39m[34mcount[39m({ where[33m:[39m { title } }))[33m.[39m[34mtoBe[39m([34m0[39m)[33m;[39m
+    [90m101|[39m   })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/13]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/integration/events-manage.test.ts[2m > [22mTEST-208 / AC-206: owner publishes a draft with a future date[2m > [22mreturns 200, PUBLISHED, persisted
+[31m[1mAssertionError[22m: expected 404 to be 200 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 200[39m
+[31m+ 404[39m
+
+[36m [2m❯[22m tests/integration/events-manage.test.ts:[2m119:24[22m[39m
+    [90m117|[39m     [35mconst[39m ev [33m=[39m [35mawait[39m [34minsertEvent[39m(org1[33m.[39mid)[33m;[39m
+    [90m118|[39m     const res = await request(app).post(`/api/events/${ev.id}/publish`…
+    [90m119|[39m     [34mexpect[39m(res[33m.[39mstatus)[33m.[39m[34mtoBe[39m([34m200[39m)[33m;[39m
+    [90m   |[39m                        [31m^[39m
+    [90m120|[39m     [34mexpect[39m(res[33m.[39mbody[33m.[39mstatus)[33m.[39m[34mtoBe[39m([32m"PUBLISHED"[39m)[33m;[39m
+    [90m121|[39m     expect((await prisma.event.findUnique({ where: { id: ev.id } }))?.…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/13]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/integration/events-manage.test.ts[2m > [22mTEST-209 / AC-207: publishing an event whose date has passed[2m > [22mreturns 409 EVENT_IN_PAST and the event stays DRAFT
+[31m[1mAssertionError[22m: expected 404 to be 409 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 409[39m
+[31m+ 404[39m
+
+[36m [2m❯[22m tests/integration/events-manage.test.ts:[2m129:24[22m[39m
+    [90m127|[39m     [35mconst[39m ev [33m=[39m [35mawait[39m [34minsertEvent[39m(org1[33m.[39mid[33m,[39m { startsAt[33m:[39m [34mpast[39m() })[33m;[39m
+    [90m128|[39m     const res = await request(app).post(`/api/events/${ev.id}/publish`…
+    [90m129|[39m     [34mexpect[39m(res[33m.[39mstatus)[33m.[39m[34mtoBe[39m([34m409[39m)[33m;[39m
+    [90m   |[39m                        [31m^[39m
+    [90m130|[39m     [34mexpect[39m(res[33m.[39mbody[33m.[39merror[33m.[39mcode)[33m.[39m[34mtoBe[39m([32m"EVENT_IN_PAST"[39m)[33m;[39m
+    [90m131|[39m     expect((await prisma.event.findUnique({ where: { id: ev.id } }))?.…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/13]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/integration/events-manage.test.ts[2m > [22mTEST-210 / AC-208: publishing an already published event[2m > [22mreturns 409 ALREADY_PUBLISHED
+[31m[1mAssertionError[22m: expected 404 to be 409 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 409[39m
+[31m+ 404[39m
+
+[36m [2m❯[22m tests/integration/events-manage.test.ts:[2m139:24[22m[39m
+    [90m137|[39m     [35mconst[39m ev [33m=[39m [35mawait[39m [34minsertEvent[39m(org1[33m.[39mid[33m,[39m { status[33m:[39m [32m"PUBLISHED"[39m })[33m;[39m
+    [90m138|[39m     const res = await request(app).post(`/api/events/${ev.id}/publish`…
+    [90m139|[39m     [34mexpect[39m(res[33m.[39mstatus)[33m.[39m[34mtoBe[39m([34m409[39m)[33m;[39m
+    [90m   |[39m                        [31m^[39m
+    [90m140|[39m     [34mexpect[39m(res[33m.[39mbody[33m.[39merror[33m.[39mcode)[33m.[39m[34mtoBe[39m([32m"ALREADY_PUBLISHED"[39m)[33m;[39m
+    [90m141|[39m   })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/13]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/integration/events-manage.test.ts[2m > [22mTEST-212 / AC-210: participant cannot publish[2m > [22mreturns 403 and leaves the event DRAFT
+[31m[1mAssertionError[22m: expected 404 to be 403 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 403[39m
+[31m+ 404[39m
+
+[36m [2m❯[22m tests/integration/events-manage.test.ts:[2m157:24[22m[39m
+    [90m155|[39m     [35mconst[39m ev [33m=[39m [35mawait[39m [34minsertEvent[39m(org1[33m.[39mid)[33m;[39m
+    [90m156|[39m     const res = await request(app).post(`/api/events/${ev.id}/publish`…
+    [90m157|[39m     [34mexpect[39m(res[33m.[39mstatus)[33m.[39m[34mtoBe[39m([34m403[39m)[33m;[39m
+    [90m   |[39m                        [31m^[39m
+    [90m158|[39m     expect((await prisma.event.findUnique({ where: { id: ev.id } }))?.…
+    [90m159|[39m   })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/13]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/integration/events-manage.test.ts[2m > [22mTEST-215 / AC-213: server-owned fields in the body are ignored[2m > [22mcreates a DRAFT owned by the caller even if organizerId and status are sent
+[31m[1mAssertionError[22m: expected 404 to be 201 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 201[39m
+[31m+ 404[39m
+
+[36m [2m❯[22m tests/integration/events-manage.test.ts:[2m175:24[22m[39m
+    [90m173|[39m     const res = await request(app).post("/api/events").set("Cookie", o…
+    [90m174|[39m       .send({ title: tag("t215"), startsAt: future(), capacity: 5, org…
+    [90m175|[39m     [34mexpect[39m(res[33m.[39mstatus)[33m.[39m[34mtoBe[39m([34m201[39m)[33m;[39m
+    [90m   |[39m                        [31m^[39m
+    [90m176|[39m     createdIds[33m.[39m[34mpush[39m(res[33m.[39mbody[33m.[39mid)[33m;[39m
+    [90m177|[39m     [34mexpect[39m(res[33m.[39mbody[33m.[39mstatus)[33m.[39m[34mtoBe[39m([32m"DRAFT"[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/13]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m13 failed[39m[22m[2m | [22m[1m[32m3 passed[39m[22m[90m (16)[39m
+[2m   Start at [22m 23:34:20
+[2m   Duration [22m 1.19s[2m (tests 66%, import 22%, transform 10%, setup 1%)[22m
+
