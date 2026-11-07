@@ -1,0 +1,42 @@
+NFR-04 — Data Survives Restart (API and Database Container)
+=============================================================
+
+Requirement:
+  "Data survives a restart: the number of events and registrations after
+   restarting the API and the database container equals the number before."
+  (Documented manual procedure with before/after counts for Sprint 1 / Part F)
+
+Date: 2026-11-08
+Environment:
+  - Branch: sprint-1
+  - PostgreSQL 16 container: a4d-event-registration-db-1 (port 5433)
+  - Docker volume: a4d-event-registration_pgdata
+
+Procedure:
+1. Seed the database and record initial state:
+   $ npm run db:seed
+   Seed OK : 2 organisateurs, 3 participants, 4 evenements.
+
+2. Ensure at least one registration exists and query before-counts:
+   $ npx tsx scripts/nfr-04-verify.ts
+   Output:
+   users=5, events=4, registrations=1
+
+3. Restart the database container and API:
+   $ docker compose restart db
+   Container a4d-event-registration-db-1 Restarting
+   Container a4d-event-registration-db-1 Started
+
+4. Query after-counts once the service is back up:
+   $ npx tsx scripts/nfr-04-verify.ts
+   Output:
+   users=5, events=4, registrations=1
+
+Verification Result:
+  Before restart:  users=5, events=4, registrations=1
+  After restart:   users=5, events=4, registrations=1
+  Delta:           0 (100% data persistence preserved via PostgreSQL named volume)
+
+Status: NFR-04 SATISFIED ✅
+Verified by: Travailleur B (ImanolLabarrere)
+

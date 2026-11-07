@@ -1,0 +1,41 @@
+﻿--- F-03 GREEN run ---
+ RUN  v5.1.0 C:/Users/imano/A4D-Event-Registration
+
+ ✓ tests/unit/browse-unit.test.ts (5 tests) 9ms
+   ✓ TEST-301 / AC-309: computeRemainingPlaces (5)
+     ✓ capacity=5, confirmed=0 -> remainingPlaces=5
+     ✓ capacity=5, confirmed=5 -> remainingPlaces=0
+     ✓ capacity=5, confirmed=6 -> remainingPlaces=0
+     ✓ capacity=1, confirmed=0 -> remainingPlaces=1
+     ✓ capacity=10, confirmed=3 -> remainingPlaces=7
+
+ ✓ tests/integration/browse.test.ts (12 tests) 9244ms
+   ✓ TEST-302 / AC-301, AC-302, AC-312: event list filtering (1)
+     ✓ returns only future published events 645ms
+   ✓ TEST-303 / AC-301: ordering by date ascending (1)
+     ✓ returns events ordered by startsAt ascending 469ms
+   ✓ TEST-304 / AC-310: empty list (1)
+     ✓ returns 200 and an empty array when no future published events exist 527ms
+   ✓ TEST-305 / AC-303: participant cannot open draft by id (1)
+     ✓ returns 404 and no title for a draft 482ms
+   ✓ TEST-306 / AC-304, AC-305: organizer draft visibility (1)
+     ✓ org2 gets 404 for org1 draft; org1 gets 200 for own draft 400ms
+   ✓ TEST-307 / AC-306: anonymous access rejected (1)
+     ✓ returns 401 for all three endpoints without a cookie 1343ms
+   ✓ TEST-308 / AC-307: organizer sees only own events on /mine (1)
+     ✓ returns both draft and published owned events, none of the other organizer's 653ms
+   ✓ TEST-309 / AC-308: participant cannot call /mine (1)
+     ✓ returns 403 514ms
+   ✓ TEST-310 / AC-309: confirmedCount and remainingPlaces (1)
+     ✓ reflects the number of confirmed registrations 606ms
+   ✓ TEST-311 / AC-311: unknown or malformed event id (1)
+     ✓ returns 404 for a random UUID and for 'abc' 590ms
+   ✓ TEST-312 / AC-312: past published event (1)
+     ✓ not in list, but 200 when fetched by id 775ms
+   ✓ TEST-313 / AC-313: no private data in responses (1)
+     ✓ event list and detail contain no email, passwordHash, userId, organizerId or registrations 2229ms
+
+ Test Files  2 passed (2)
+      Tests  17 passed (17)
+   Start at  00:57:13
+   Duration  11.45s

@@ -1,0 +1,189 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.1.0 [39m[90m/home/xavier/repoGIT/A4D-Event-Registration[39m
+
+ [31m❯[39m tests/integration/register.test.ts [2m([22m[2m12 tests[22m[2m | [22m[31m8 failed[39m[2m)[22m[33m 3129[2mms[22m[39m
+   [31m❯[39m TEST-402 / AC-401: participant registers for a published future event [2m(1)[22m
+[31m     [31m×[31m returns 201 CONFIRMED and stores the registration for the caller[39m[32m 96[2mms[22m[39m
+   [31m❯[39m TEST-403 / AC-412: boundary, N-1 of N places taken [2m(1)[22m
+[31m     [31m×[31m accepts the last participant and the confirmed count reaches capacity[39m[32m 26[2mms[22m[39m
+   [31m❯[39m TEST-404 / AC-402: event at capacity (BR-04) [2m(1)[22m
+[31m     [31m×[31m returns 409 EVENT_FULL and stores no extra row[39m[32m 22[2mms[22m[39m
+   [31m❯[39m TEST-405 / AC-403: same participant registers twice (BR-03) [2m(1)[22m
+[31m     [31m×[31m returns 409 ALREADY_REGISTERED and keeps one row[39m[32m 13[2mms[22m[39m
+   [31m❯[39m TEST-406 / AC-404: past event (BR-05) [2m(1)[22m
+[31m     [31m×[31m returns 409 EVENT_IN_PAST and stores nothing[39m[32m 12[2mms[22m[39m
+   [32m✓[39m TEST-407 / AC-405: draft event is invisible (BR-06) [2m(1)[22m
+     [32m✓[39m returns 404 and stores nothing[32m 13[2mms[22m[39m
+   [32m✓[39m TEST-408 / AC-406: unknown or malformed id [2m(1)[22m
+     [32m✓[39m returns 404 for a random UUID and for 'abc'[32m 24[2mms[22m[39m
+   [31m❯[39m TEST-409 / AC-407: organizer cannot register [2m(1)[22m
+[31m     [31m×[31m returns 403 and stores nothing[39m[32m 12[2mms[22m[39m
+   [32m✓[39m TEST-410 / AC-408: anonymous cannot register [2m(1)[22m
+     [32m✓[39m returns 401 without private data[32m 10[2mms[22m[39m
+   [31m❯[39m TEST-411 / AC-409 / NFR-03: 20 simultaneous requests for the last place [2m(1)[22m
+[31m     [31m×[31m exactly one 201, nineteen 409 EVENT_FULL, confirmed count equals capacity[39m[33m 2293[2mms[22m[39m
+   [31m❯[39m TEST-412 / AC-410: 5 simultaneous requests from the same participant [2m(1)[22m
+[31m     [31m×[31m exactly one 201, four 409 ALREADY_REGISTERED, one row[39m[32m 114[2mms[22m[39m
+   [32m✓[39m TEST-413 / AC-411: the database itself rejects a duplicate registration [2m(1)[22m
+     [32m✓[39m raises a UNIQUE violation on a second row for the same (event, user)[32m 13[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 8 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m tests/integration/register.test.ts[2m > [22mTEST-402 / AC-401: participant registers for a published future event[2m > [22mreturns 201 CONFIRMED and stores the registration for the caller
+[31m[1mAssertionError[22m: expected 404 to be 201 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 201[39m
+[31m+ 404[39m
+
+[36m [2m❯[22m tests/integration/register.test.ts:[2m76:24[22m[39m
+    [90m 74|[39m     [35mconst[39m ev [33m=[39m [35mawait[39m [34minsertEvent[39m()[33m;[39m
+    [90m 75|[39m     [35mconst[39m res [33m=[39m [35mawait[39m [34mregister[39m(ev[33m.[39mid[33m,[39m part1[33m.[39mcookie)[33m;[39m
+    [90m 76|[39m     [34mexpect[39m(res[33m.[39mstatus)[33m.[39m[34mtoBe[39m([34m201[39m)[33m;[39m
+    [90m   |[39m                        [31m^[39m
+    [90m 77|[39m     [34mexpect[39m(res[33m.[39mbody[33m.[39mstatus)[33m.[39m[34mtoBe[39m([32m"CONFIRMED"[39m)[33m;[39m
+    [90m 78|[39m     [34mexpect[39m(res[33m.[39mbody[33m.[39meventId)[33m.[39m[34mtoBe[39m(ev[33m.[39mid)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/integration/register.test.ts[2m > [22mTEST-403 / AC-412: boundary, N-1 of N places taken[2m > [22maccepts the last participant and the confirmed count reaches capacity
+[31m[1mAssertionError[22m: expected 404 to be 201 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 201[39m
+[31m+ 404[39m
+
+[36m [2m❯[22m tests/integration/register.test.ts:[2m90:24[22m[39m
+    [90m 88|[39m     await prisma.registration.createMany({ data: [a, b].map((u) => ({ …
+    [90m 89|[39m     [35mconst[39m res [33m=[39m [35mawait[39m [34mregister[39m(ev[33m.[39mid[33m,[39m part1[33m.[39mcookie)[33m;[39m
+    [90m 90|[39m     [34mexpect[39m(res[33m.[39mstatus)[33m.[39m[34mtoBe[39m([34m201[39m)[33m;[39m
+    [90m   |[39m                        [31m^[39m
+    [90m 91|[39m     expect(await prisma.registration.count({ where: { eventId: ev.id, …
+    [90m 92|[39m   })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/integration/register.test.ts[2m > [22mTEST-404 / AC-402: event at capacity (BR-04)[2m > [22mreturns 409 EVENT_FULL and stores no extra row
+[31m[1mAssertionError[22m: expected 404 to be 409 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 409[39m
+[31m+ 404[39m
+
+[36m [2m❯[22m tests/integration/register.test.ts:[2m101:24[22m[39m
+    [90m 99|[39m     await prisma.registration.create({ data: { eventId: ev.id, userId:…
+    [90m100|[39m     [35mconst[39m res [33m=[39m [35mawait[39m [34mregister[39m(ev[33m.[39mid[33m,[39m part1[33m.[39mcookie)[33m;[39m
+    [90m101|[39m     [34mexpect[39m(res[33m.[39mstatus)[33m.[39m[34mtoBe[39m([34m409[39m)[33m;[39m
+    [90m   |[39m                        [31m^[39m
+    [90m102|[39m     [34mexpect[39m(res[33m.[39mbody[33m.[39merror[33m.[39mcode)[33m.[39m[34mtoBe[39m([32m"EVENT_FULL"[39m)[33m;[39m
+    [90m103|[39m     expect(await prisma.registration.count({ where: { eventId: ev.id }…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/8]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/integration/register.test.ts[2m > [22mTEST-405 / AC-403: same participant registers twice (BR-03)[2m > [22mreturns 409 ALREADY_REGISTERED and keeps one row
+[31m[1mAssertionError[22m: expected 404 to be 201 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 201[39m
+[31m+ 404[39m
+
+[36m [2m❯[22m tests/integration/register.test.ts:[2m110:58[22m[39m
+    [90m108|[39m   [34mit[39m([32m"returns 409 ALREADY_REGISTERED and keeps one row"[39m[33m,[39m [35masync[39m () [33m=>[39m {
+    [90m109|[39m     [35mconst[39m ev [33m=[39m [35mawait[39m [34minsertEvent[39m()[33m;[39m
+    [90m110|[39m     [34mexpect[39m(([35mawait[39m [34mregister[39m(ev[33m.[39mid[33m,[39m part1[33m.[39mcookie))[33m.[39mstatus)[33m.[39m[34mtoBe[39m([34m201[39m)[33m;[39m
+    [90m   |[39m                                                          [31m^[39m
+    [90m111|[39m     [35mconst[39m res [33m=[39m [35mawait[39m [34mregister[39m(ev[33m.[39mid[33m,[39m part1[33m.[39mcookie)[33m;[39m
+    [90m112|[39m     [34mexpect[39m(res[33m.[39mstatus)[33m.[39m[34mtoBe[39m([34m409[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/8]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/integration/register.test.ts[2m > [22mTEST-406 / AC-404: past event (BR-05)[2m > [22mreturns 409 EVENT_IN_PAST and stores nothing
+[31m[1mAssertionError[22m: expected 404 to be 409 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 409[39m
+[31m+ 404[39m
+
+[36m [2m❯[22m tests/integration/register.test.ts:[2m122:24[22m[39m
+    [90m120|[39m     const ev = await insertEvent({ startsAt: new Date(Date.now() - 2 *…
+    [90m121|[39m     [35mconst[39m res [33m=[39m [35mawait[39m [34mregister[39m(ev[33m.[39mid[33m,[39m part1[33m.[39mcookie)[33m;[39m
+    [90m122|[39m     [34mexpect[39m(res[33m.[39mstatus)[33m.[39m[34mtoBe[39m([34m409[39m)[33m;[39m
+    [90m   |[39m                        [31m^[39m
+    [90m123|[39m     [34mexpect[39m(res[33m.[39mbody[33m.[39merror[33m.[39mcode)[33m.[39m[34mtoBe[39m([32m"EVENT_IN_PAST"[39m)[33m;[39m
+    [90m124|[39m     expect(await prisma.registration.count({ where: { eventId: ev.id }…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/8]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/integration/register.test.ts[2m > [22mTEST-409 / AC-407: organizer cannot register[2m > [22mreturns 403 and stores nothing
+[31m[1mAssertionError[22m: expected 404 to be 403 // Object.is equality[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 403[39m
+[31m+ 404[39m
+
+[36m [2m❯[22m tests/integration/register.test.ts:[2m148:24[22m[39m
+    [90m146|[39m     [35mconst[39m ev [33m=[39m [35mawait[39m [34minsertEvent[39m()[33m;[39m
+    [90m147|[39m     [35mconst[39m res [33m=[39m [35mawait[39m [34mregister[39m(ev[33m.[39mid[33m,[39m org1[33m.[39mcookie)[33m;[39m
+    [90m148|[39m     [34mexpect[39m(res[33m.[39mstatus)[33m.[39m[34mtoBe[39m([34m403[39m)[33m;[39m
+    [90m   |[39m                        [31m^[39m
+    [90m149|[39m     expect(await prisma.registration.count({ where: { eventId: ev.id }…
+    [90m150|[39m   })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/8]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/integration/register.test.ts[2m > [22mTEST-411 / AC-409 / NFR-03: 20 simultaneous requests for the last place[2m > [22mexactly one 201, nineteen 409 EVENT_FULL, confirmed count equals capacity
+[31m[1mAssertionError[22m: expected [] to have a length of 1 but got +0[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 1[39m
+[31m+ 0[39m
+
+[36m [2m❯[22m tests/integration/register.test.ts:[2m175:53[22m[39m
+    [90m173|[39m     const results = await Promise.all(cookies.map((c) => register(ev.i…
+    [90m174|[39m
+    [90m175|[39m     [34mexpect[39m(results[33m.[39m[34mfilter[39m((r) [33m=>[39m r[33m.[39mstatus [33m===[39m [34m201[39m))[33m.[39m[34mtoHaveLength[39m([34m1[39m)[33m;[39m
+    [90m   |[39m                                                     [31m^[39m
+    [90m176|[39m     [35mconst[39m full [33m=[39m results[33m.[39m[34mfilter[39m((r) [33m=>[39m r[33m.[39mstatus [33m===[39m [34m409[39m)[33m;[39m
+    [90m177|[39m     [34mexpect[39m(full)[33m.[39m[34mtoHaveLength[39m([34m19[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/8]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/integration/register.test.ts[2m > [22mTEST-412 / AC-410: 5 simultaneous requests from the same participant[2m > [22mexactly one 201, four 409 ALREADY_REGISTERED, one row
+[31m[1mAssertionError[22m: expected [] to have a length of 1 but got +0[39m
+
+[32m- Expected[39m
+[31m+ Received[39m
+
+[32m- 1[39m
+[31m+ 0[39m
+
+[36m [2m❯[22m tests/integration/register.test.ts:[2m189:53[22m[39m
+    [90m187|[39m     [35mconst[39m { cookie } [33m=[39m [35mawait[39m [34mloginAs[39m(u[33m.[39memail)[33m;[39m
+    [90m188|[39m     const results = await Promise.all([1, 2, 3, 4, 5].map(() => regist…
+    [90m189|[39m     [34mexpect[39m(results[33m.[39m[34mfilter[39m((r) [33m=>[39m r[33m.[39mstatus [33m===[39m [34m201[39m))[33m.[39m[34mtoHaveLength[39m([34m1[39m)[33m;[39m
+    [90m   |[39m                                                     [31m^[39m
+    [90m190|[39m     [35mconst[39m dup [33m=[39m results[33m.[39m[34mfilter[39m((r) [33m=>[39m r[33m.[39mstatus [33m===[39m [34m409[39m)[33m;[39m
+    [90m191|[39m     [34mexpect[39m(dup)[33m.[39m[34mtoHaveLength[39m([34m4[39m)[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/8]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m8 failed[39m[22m[2m | [22m[1m[32m4 passed[39m[22m[90m (12)[39m
+[2m   Start at [22m 00:23:01
+[2m   Duration [22m 3.80s[2m (tests 87%, import 8%, transform 4%, setup 1%)[22m
+

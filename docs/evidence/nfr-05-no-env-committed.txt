@@ -1,0 +1,17 @@
+NFR-05 — No .env file committed to the repository
+===================================================
+
+Command run on branch sprint-1 (commit d3df757):
+
+  git ls-files | grep '\.env'
+
+Output:
+  .env.example
+
+Result: Only .env.example (template, no secrets) is tracked by Git.
+        The real .env file is in .gitignore and has never been committed.
+
+NFR-05: SATISFIED ✅
+Date: 2026-11-08
+Verified by: Travailleur B (ImanolLabarrere)
+

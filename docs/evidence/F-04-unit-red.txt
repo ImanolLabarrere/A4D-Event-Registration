@@ -1,0 +1,83 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.1.0 [39m[90m/home/xavier/repoGIT/A4D-Event-Registration[39m
+
+ [31m❯[39m tests/unit/registration-rules.test.ts [2m([22m[2m5 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[32m 15[2mms[22m[39m
+   [31m❯[39m TEST-401 / AC-402, 403, 404, 412: registration decision (BR-03, BR-04, BR-05) [2m(5)[22m
+     [32m✓[39m accepts when N-1 of N places are taken (boundary)[32m 2[2mms[22m[39m
+[31m     [31m×[31m returns FULL when the event is at capacity[39m[32m 7[2mms[22m[39m
+[31m     [31m×[31m returns DUPLICATE when the participant is already registered[39m[32m 1[2mms[22m[39m
+[31m     [31m×[31m returns PAST when the event date is not in the future[39m[32m 1[2mms[22m[39m
+[31m     [31m×[31m applies precedence PAST > DUPLICATE > FULL[39m[32m 1[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m tests/unit/registration-rules.test.ts[2m > [22mTEST-401 / AC-402, 403, 404, 412: registration decision (BR-03, BR-04, BR-05)[2m > [22mreturns FULL when the event is at capacity
+[31m[1mAssertionError[22m: expected 'OK' to be 'FULL' // Object.is equality[39m
+
+Expected: [32m"FULL"[39m
+Received: [31m"OK"[39m
+
+[36m [2m❯[22m tests/unit/registration-rules.test.ts:[2m14:64[22m[39m
+    [90m 12|[39m   })[33m;[39m
+    [90m 13|[39m   [34mit[39m([32m"returns FULL when the event is at capacity"[39m[33m,[39m () [33m=>[39m {
+    [90m 14|[39m     expect(decideRegistration({ ...open, confirmedCount: 3 })).toBe("F…
+    [90m   |[39m                                                                [31m^[39m
+    [90m 15|[39m   })[33m;[39m
+    [90m 16|[39m   it("returns DUPLICATE when the participant is already registered", (…
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/registration-rules.test.ts[2m > [22mTEST-401 / AC-402, 403, 404, 412: registration decision (BR-03, BR-04, BR-05)[2m > [22mreturns DUPLICATE when the participant is already registered
+[31m[1mAssertionError[22m: expected 'OK' to be 'DUPLICATE' // Object.is equality[39m
+
+Expected: [32m"DUPLICATE"[39m
+Received: [31m"OK"[39m
+
+[36m [2m❯[22m tests/unit/registration-rules.test.ts:[2m17:70[22m[39m
+    [90m 15|[39m   })[33m;[39m
+    [90m 16|[39m   it("returns DUPLICATE when the participant is already registered", (…
+    [90m 17|[39m     expect(decideRegistration({ ...open, alreadyRegistered: true })).t…
+    [90m   |[39m                                                                      [31m^[39m
+    [90m 18|[39m   })[33m;[39m
+    [90m 19|[39m   [34mit[39m([32m"returns PAST when the event date is not in the future"[39m[33m,[39m () [33m=>[39m {
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/registration-rules.test.ts[2m > [22mTEST-401 / AC-402, 403, 404, 412: registration decision (BR-03, BR-04, BR-05)[2m > [22mreturns PAST when the event date is not in the future
+[31m[1mAssertionError[22m: expected 'OK' to be 'PAST' // Object.is equality[39m
+
+Expected: [32m"PAST"[39m
+Received: [31m"OK"[39m
+
+[36m [2m❯[22m tests/unit/registration-rules.test.ts:[2m20:61[22m[39m
+    [90m 18|[39m   })[33m;[39m
+    [90m 19|[39m   [34mit[39m([32m"returns PAST when the event date is not in the future"[39m[33m,[39m () [33m=>[39m {
+    [90m 20|[39m     expect(decideRegistration({ ...open, startsAt: past })).toBe("PAST…
+    [90m   |[39m                                                             [31m^[39m
+    [90m 21|[39m     expect(decideRegistration({ ...open, startsAt: now })).toBe("PAST"…
+    [90m 22|[39m   })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m tests/unit/registration-rules.test.ts[2m > [22mTEST-401 / AC-402, 403, 404, 412: registration decision (BR-03, BR-04, BR-05)[2m > [22mapplies precedence PAST > DUPLICATE > FULL
+[31m[1mAssertionError[22m: expected 'OK' to be 'PAST' // Object.is equality[39m
+
+Expected: [32m"PAST"[39m
+Received: [31m"OK"[39m
+
+[36m [2m❯[22m tests/unit/registration-rules.test.ts:[2m25:37[22m[39m
+    [90m 23|[39m   [34mit[39m([32m"applies precedence PAST > DUPLICATE > FULL"[39m[33m,[39m () [33m=>[39m {
+    [90m 24|[39m     const all = { ...open, confirmedCount: 3, alreadyRegistered: true,…
+    [90m 25|[39m     [34mexpect[39m([34mdecideRegistration[39m(all))[33m.[39m[34mtoBe[39m([32m"PAST"[39m)[33m;[39m
+    [90m   |[39m                                     [31m^[39m
+    [90m 26|[39m     expect(decideRegistration({ ...all, startsAt: future })).toBe("DUP…
+    [90m 27|[39m   })[33m;[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[2m | [22m[1m[32m1 passed[39m[22m[90m (5)[39m
+[2m   Start at [22m 00:28:17
+[2m   Duration [22m 275ms[2m (transform 52%, setup 18%, tests 16%, import 9%, worker 5%)[22m
+

@@ -1,0 +1,25 @@
+﻿--- F-06 GREEN run ---
+ RUN  v5.1.0 C:/Users/imano/A4D-Event-Registration
+
+ ✓ tests/integration/organizer-view.test.ts (8 tests) 7057ms
+   ✓ TEST-601 / AC-601: owner lists registrations of own event (1)
+     ✓ returns 200 with all registrations, participant email, ordered by createdAt 810ms
+   ✓ TEST-602 / AC-602: empty registrations (1)
+     ✓ returns 200 with empty registrations and confirmedCount 0 748ms
+   ✓ TEST-603 / AC-603: other organizer gets 404 (1)
+     ✓ returns 404 and no participant email when requesting another organizer's event 552ms
+   ✓ TEST-604 / AC-604: participant gets 403 (1)
+     ✓ returns 403 for participant callers 884ms
+   ✓ TEST-605 / AC-605: anonymous gets 401 (1)
+     ✓ returns 401 when unauthenticated 727ms
+   ✓ TEST-606 / AC-606: unknown or malformed id (1)
+     ✓ returns 404 for nonexistent UUID and for 'abc' 650ms
+   ✓ TEST-607 / AC-607: registration isolation between events (1)
+     ✓ returns only registrations of the requested event 1287ms
+   ✓ TEST-608 / AC-608: no extra private fields on participant (1)
+     ✓ exposes only id and email on participant; no passwordHash, role, session 1381ms
+
+ Test Files  1 passed (1)
+      Tests  8 passed (8)
+   Start at  01:00:00
+   Duration  9.13s
