@@ -1,0 +1,25 @@
+﻿--- F-05 RED run (GET /api/registrations and /:id not mounted yet) ---
+ RUN  v5.1.0 C:/Users/imano/A4D-Event-Registration
+
+ ❯ tests/integration/my-registrations.test.ts (8 tests | 7 failed) 3021ms
+   ❯ TEST-501 / AC-501: participant sees only own registrations (1)
+     × P1 has 2 registrations, P2 has 1 -> P1 sees 2 own, P2 sees 1 own
+   ❯ TEST-502 / AC-502: participant without registration (1)
+     × returns 200 with an empty array
+   ❯ TEST-503 / AC-503: open own registration by id (1)
+     × returns 200 with stored registration data
+   ❯ TEST-504 / AC-504: participant opens another participant's registration (1)
+     × returns 404 with no registration or event data (BR-09)
+   ❯ TEST-505 / AC-505: nonexistent or malformed registration id (1)
+     × returns 404 with body identical to AC-504
+   ❯ TEST-506 / AC-506: organizer access forbidden (1)
+     × returns 403 for both list and detail endpoints
+   ❯ TEST-507 / AC-507: anonymous access unauthenticated (1)
+     × returns 401 for both endpoints without cookies
+   ✓ TEST-508 / AC-508: privacy check (1)
+     ✓ never returns email, passwordHash or userId
+
+ Test Files  1 failed (1)
+      Tests  7 failed | 1 passed (8)
+   Start at  00:21:24
+   Duration  4.30s
