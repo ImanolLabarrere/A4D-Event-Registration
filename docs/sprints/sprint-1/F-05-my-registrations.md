@@ -43,7 +43,7 @@ No schema change. Read-only on Registration joined with Event.
 | TEST | AC | Level | Precondition / input | Action | Expected result |
 |---|---|---|---|---|---|
 | TEST-501 | AC-501 | API/DB | P1 has 2 registrations, P2 has 1 | P1 lists; P2 lists | P1 sees 2 own only; P2 sees 1 own only |
-| TEST-502 | AC-502 | API | Participant without registration | GET list | 200, [] |
+| TEST-502 | AC-502 | API | Participant without registration | GET list | 200, empty list |
 | TEST-503 | AC-503 | API/DB | P1 registers via F-04 | GET detail with returned id | 200; eventId, status, createdAt match the stored row |
 | TEST-504 | AC-504 | API/DB | Registration owned by P2 | P1 GET detail | 404; body has no eventTitle or userId |
 | TEST-505 | AC-505 | API | Random UUID | GET detail | 404; body equal to TEST-504 body |

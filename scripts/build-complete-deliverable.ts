@@ -9,6 +9,9 @@ function readDoc(relPath: string): string {
   content = content.replace(/Travailleur B/g, "Student B");
   content = content.replace(/\\rightarrow/g, "→");
   content = content.replace(/\$\\rightarrow\$/g, "→");
+  // Clean up any remaining braces or brackets in table lines like TEST-502
+  content = content.replace(/\| TEST-502 \| AC-502 \| API \| Participant without registration \| GET list \| 200, \[\] \|/g, "| TEST-502 | AC-502 | API | Participant without registration | GET list | 200, empty list |");
+  content = content.replace(/\| TEST-502 \| AC-502 \| API \| Participant without registration \| GET list \| 200, \{\} \|/g, "| TEST-502 | AC-502 | API | Participant without registration | GET list | 200, empty list |");
   return content;
 }
 
@@ -36,10 +39,10 @@ async function main() {
 ### Project & Submission Metadata
 - **Theme / Selected Context:** University Department Workshop & Event Registration System (Theme: Event Registration and Attendance)
 - **Repository URL:** [https://github.com/ImanolLabarrere/A4D-Event-Registration](https://github.com/ImanolLabarrere/A4D-Event-Registration)
-- **Submitted Release Tag:** \`v0.1.0-sprint1\` (commit \`4d90108\`)
+- **Submitted Release Tag:** \`v0.1.0-sprint1\` (commit \`e4270ee\`)
 - **Staging / Base Branches:** \`sprint-1\` merged into \`main\` via reviewed Pull Requests #23 and #24
 - **Student Team:**
-  - **Student A:** Xavier Gobert (\`xgobert@et.esiea.fr\` / GitHub: \`hoshiiiix\`)
+  - **Student A:** Xavier Gobert (Student ID: \`69540460003\` / \`xgobert@et.esiea.fr\` / GitHub: \`hoshiiiix\`)
   - **Student B:** Imanol Labarrere (Student ID: \`69540460013\` / GitHub: \`ImanolLabarrere\`)
 
 ---
@@ -52,7 +55,7 @@ async function main() {
 | **Part C** | System-Level SDS | Architecture, Modular Monolith Stack, Data Model & Prisma Schema, Migrations, UI screens, API conventions, Role matrix, Security & GCP Plan |
 | **Part D** | Three-Sprint Plan | Sprints 1, 2, 3 goals, feature allocations, dependencies, completion outcomes, Sprint 1 feasible scope justification |
 | **Part E** | Sprint 1 Engineering Contracts | Full specifications, UI/API/Data models, AC-101..609, STS TEST-101..610 for F-01, F-02, F-03, F-04, F-05, F-06 and Product DoD v1.0 |
-| **Part F** | Working Sprint 1 & Verification | Screen captures (normal, rejection, security), Test results (101 Vitest + 3 E2E Playwright), Code excerpts (TEST-411, TEST-603/604), TDD Red/Green cycles, PR evidence (#15, #20), Contribution table, AI declaration, Setup summary |
+| **Part F** | Working Sprint 1 & Verification | Screen captures (normal, rejection, security), Test results (101 Vitest + 3 E2E Playwright), Code excerpts (TEST-411, TEST-603/604), TDD Red/Green evidence captures (F-01..F-06), PR evidence (#15, #20), Contribution table, AI declaration, Setup summary |
 
 ---
 
@@ -134,7 +137,7 @@ ${f06}
 
 ### Scenario 1: Complete Normal Domain Journey
 - **Linked Requirements & AC:** FR-01, FR-02, FR-03, FR-04, FR-05, FR-06 / AC-101, AC-201, AC-206, AC-301, AC-401, AC-501, AC-601
-- **Tested Release Commit:** \`4d90108\` (tag \`v0.1.0-sprint1\`)
+- **Tested Release Commit:** \`e4270ee\` (tag \`v0.1.0-sprint1\`)
 - **Automated Reference:** Playwright E2E Test \`E2E-02: Complete lifecycle\` in \`tests/e2e/journey.spec.ts\`
 - **Preconditions:** Seeded database (\`npm run db:seed\`) with \`organizer2@example.test\` and \`participant1@example.test\`.
 - **Execution Steps:**
@@ -158,7 +161,7 @@ ${f06}
 
 ### Scenario 2: Meaningful Business Rule and Boundary Rejections
 - **Linked Rules:** BR-01, BR-02, BR-03, BR-04, BR-05, BR-06 / AC-201, AC-209, AC-403, AC-404, AC-405
-- **Tested Release Commit:** \`4d90108\`
+- **Tested Release Commit:** \`e4270ee\`
 - **Step-by-step Demonstration:**
   1. **Capacity <= 0 (BR-01):** Organizer attempts \`POST /api/events\` with \`capacity: 0\`.  
      *Result:* HTTP 400 Bad Request with \`{ "error": { "code": "VALIDATION_ERROR", "message": "Invalid event data" } }\`. Database \`CHECK (capacity > 0)\` also protects data integrity.
@@ -180,7 +183,7 @@ ${f06}
 
 ### Scenario 3: Login/Logout, Role Boundaries & Ownership Enforcement
 - **Linked Requirements:** NFR-01, NFR-06, BR-07, BR-09 / AC-102, AC-207, AC-308, AC-506, AC-603, AC-604
-- **Tested Release Commit:** \`4d90108\`
+- **Tested Release Commit:** \`e4270ee\`
 - **Automated Reference:** Playwright E2E Tests \`TEST-114\` and \`E2E-03\`
 - **Step-by-step Demonstration:**
   1. **Unauthenticated Access:** Client calls \`GET /api/auth/me\` without cookie.  
@@ -207,7 +210,7 @@ ${f06}
 ### Commands and Environment
 - **Unit and Integration Test Command:** \`npm test\` (\`vitest run\`)
 - **End-to-End Test Command:** \`npm run test:e2e\` (\`playwright test\`)
-- **Tested Commit:** \`4d90108\` (tag \`v0.1.0-sprint1\`)
+- **Tested Commit:** \`e4270ee\` (tag \`v0.1.0-sprint1\`)
 - **Database Engine:** PostgreSQL 16 on Docker container port 5433
 
 #### Screen Capture — Vitest Suite Execution (101 Tests Passed):
@@ -303,7 +306,7 @@ test("TEST-604 / AC-604: participant gets 403", async () => {
 
 ---
 
-## 4. Test-Driven Development (TDD) Progression
+## 4. Test-Driven Development (TDD) Progression & Red-to-Green Evidence
 
 In accordance with DoD item 3, every feature began with a failing test commit (Red) before the implementation made tests pass (Green). Evidence files are preserved in \`docs/evidence/\`.
 
@@ -315,6 +318,26 @@ In accordance with DoD item 3, every feature began with a failing test commit (R
 | **F-04 Register** | \`a53cb3b\` (\`F-04-unit-red.txt\`, \`F-04-http-red.txt\`) | \`379ba22\` (\`F-04-unit-green.txt\`, \`F-04-http-green.txt\`) | Row lock (\`SELECT FOR UPDATE\`), \`decideRegistration\`, 20-client concurrency |
 | **F-05 My Regs** | \`75ee461\` (\`F-05-red.txt\`) | \`dc1917b\` (\`F-05-green.txt\`) | Participant-isolated \`GET /api/registrations\` and \`/:id\` |
 | **F-06 Org View** | \`50c6bf2\` (\`F-06-red.txt\`) | \`46654e5\` (\`F-06-green.txt\`) | Owner attendee list, privacy projection (only id/email exposed) |
+
+### Feature TDD Red-to-Green Screen Captures
+
+#### F-01: Authentication (Red failing module import → Green 23 passed)
+![F-01 Authentication TDD Cycle](./evidence/screenshots/evidence-f01-tdd.png)
+
+#### F-02: Create & Publish Events (Red rule/route failure → Green 28 passed)
+![F-02 Events TDD Cycle](./evidence/screenshots/evidence-f02-tdd.png)
+
+#### F-03: Browse Published Events (Red unmounted route → Green 17 passed)
+![F-03 Browse Events TDD Cycle](./evidence/screenshots/evidence-f03-tdd.png)
+
+#### F-04: Register & Concurrency Lock (Red missing decideRegistration → Green 17 passed including TEST-411)
+![F-04 Concurrency & Row Lock TDD Cycle](./evidence/screenshots/evidence-f04-tdd.png)
+
+#### F-05: My Registrations (Red 7 failing endpoints → Green 8 passed)
+![F-05 My Registrations TDD Cycle](./evidence/screenshots/evidence-f05-tdd.png)
+
+#### F-06: Organizer View of Registrations (Red 6 failing endpoints → Green 8 passed)
+![F-06 Organizer View TDD Cycle](./evidence/screenshots/evidence-f06-tdd.png)
 
 ---
 
@@ -362,7 +385,7 @@ All development was executed through dedicated Git branches and thoroughly revie
 
 ## 7. Team Contributions Table
 
-| Area | Student A (Xavier Gobert — \`hoshiiiix\`) | Student B (Imanol Labarrere — \`ImanolLabarrere\`) |
+| Area | Student A (Xavier Gobert — ID: \`69540460003\`) | Student B (Imanol Labarrere — ID: \`69540460013\`) |
 |---|---|---|
 | **Specifications** | Authored contracts: F-02, F-04, F-05, and DoD v1.0 | Authored baseline SRS, SDS, contracts F-01, F-03, F-06, traceability |
 | **Development** | Implemented F-02 (Events) and F-04 (Register with concurrency row lock) | Implemented project skeleton, DB schema/migrations, F-01 (Auth), F-03 (Browse), F-05 (My Regs), F-06 (Org View) |
@@ -421,7 +444,7 @@ npm run test:e2e
 
   const outPath = path.resolve(__dirname, "../docs/deliverable-sprint-1.md");
   fs.writeFileSync(outPath, deliverableMd, "utf-8");
-  console.log("Updated deliverable markdown with screenshots and English terms generated at:", outPath);
+  console.log("Updated deliverable markdown with TDD cards and Xavier ID generated at:", outPath);
 }
 
 main().catch((err) => {
