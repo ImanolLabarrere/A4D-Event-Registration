@@ -7,11 +7,11 @@
 ### Project & Submission Metadata
 - **Theme / Selected Context:** University Department Workshop & Event Registration System (Theme: Event Registration and Attendance)
 - **Repository URL:** [https://github.com/ImanolLabarrere/A4D-Event-Registration](https://github.com/ImanolLabarrere/A4D-Event-Registration)
-- **Submitted Release Tag:** `v0.1.0-sprint1` (commit `513b249`)
+- **Submitted Release Tag:** `v0.1.0-sprint1` (commit `4d90108`)
 - **Staging / Base Branches:** `sprint-1` merged into `main` via reviewed Pull Requests #23 and #24
 - **Student Team:**
-  - **Student A:** Xavier Gobert (`xgobert@et.esiea.fr` / GitHub: `hoshiiiix`) — *Travailleur A*
-  - **Student B:** Imanol Labarrere (Student ID: `69540460013` / GitHub: `ImanolLabarrere`) — *Travailleur B*
+  - **Student A:** Xavier Gobert (`xgobert@et.esiea.fr` / GitHub: `hoshiiiix`)
+  - **Student B:** Imanol Labarrere (Student ID: `69540460013` / GitHub: `ImanolLabarrere`)
 
 ---
 
@@ -23,7 +23,7 @@
 | **Part C** | System-Level SDS | Architecture, Modular Monolith Stack, Data Model & Prisma Schema, Migrations, UI screens, API conventions, Role matrix, Security & GCP Plan |
 | **Part D** | Three-Sprint Plan | Sprints 1, 2, 3 goals, feature allocations, dependencies, completion outcomes, Sprint 1 feasible scope justification |
 | **Part E** | Sprint 1 Engineering Contracts | Full specifications, UI/API/Data models, AC-101..609, STS TEST-101..610 for F-01, F-02, F-03, F-04, F-05, F-06 and Product DoD v1.0 |
-| **Part F** | Working Sprint 1 & Verification | Scenarios (normal, rejection, security), Test results (101 Vitest + 3 E2E Playwright), Code excerpts (TEST-411, TEST-603/604), TDD Red/Green cycles, PR evidence (#15, #20), Contribution table, AI declaration, Setup summary |
+| **Part F** | Working Sprint 1 & Verification | Screen captures (normal, rejection, security), Test results (101 Vitest + 3 E2E Playwright), Code excerpts (TEST-411, TEST-603/604), TDD Red/Green cycles, PR evidence (#15, #20), Contribution table, AI declaration, Setup summary |
 
 ---
 
@@ -901,30 +901,33 @@ Command: npm test and npm run test:e2e. Recorded in Part F: test output, tested 
 
 ### Scenario 1: Complete Normal Domain Journey
 - **Linked Requirements & AC:** FR-01, FR-02, FR-03, FR-04, FR-05, FR-06 / AC-101, AC-201, AC-206, AC-301, AC-401, AC-501, AC-601
-- **Tested Release Commit:** `513b249` (tag `v0.1.0-sprint1`)
+- **Tested Release Commit:** `4d90108` (tag `v0.1.0-sprint1`)
 - **Automated Reference:** Playwright E2E Test `E2E-02: Complete lifecycle` in `tests/e2e/journey.spec.ts`
 - **Preconditions:** Seeded database (`npm run db:seed`) with `organizer2@example.test` and `participant1@example.test`.
 - **Execution Steps:**
-  1. **Organizer Login:** `POST /api/auth/login` with `organizer2@example.test` $ightarrow$ HTTP 200, session cookie `sid` issued.
-  2. **Event Creation:** Organizer sends `POST /api/events` with `{ title: "E2E Grand Hackathon", startsAt: "+15 days", capacity: 2 }` $ightarrow$ HTTP 201 Created with status `"DRAFT"`.
-  3. **Event Publication:** Organizer sends `POST /api/events/:id/publish` $ightarrow$ HTTP 200 OK, event status transitions to `"PUBLISHED"`.
-  4. **Organizer Logout:** `POST /api/auth/logout` $ightarrow$ HTTP 204.
-  5. **Participant Login:** `POST /api/auth/login` with `participant1@example.test` $ightarrow$ HTTP 200.
-  6. **Browse Events:** Participant calls `GET /api/events` $ightarrow$ HTTP 200; the newly published event appears with `remainingPlaces: 2` and `confirmedCount: 0`.
-  7. **Registration:** Participant calls `POST /api/events/:id/registrations` $ightarrow$ HTTP 201 Created, returning `{ id, eventId, status: "CONFIRMED", createdAt }`.
-  8. **Consult My Registrations:** Participant calls `GET /api/registrations` $ightarrow$ HTTP 200, returning the confirmed registration linked to "E2E Grand Hackathon".
-  9. **Consult Registration Detail:** Participant calls `GET /api/registrations/:id` $ightarrow$ HTTP 200 with matching event title and status.
-  10. **Organizer Checks Attendee List:** Organizer logs back in, calls `GET /api/events/:id/registrations` $ightarrow$ HTTP 200, `confirmedCount: 1`, registrations array contains participant's email `participant1@example.test` and registration timestamp.
+  1. **Organizer Login:** `POST /api/auth/login` with `organizer2@example.test` → HTTP 200, session cookie `sid` issued.
+  2. **Event Creation:** Organizer sends `POST /api/events` with `{ title: "E2E Grand Hackathon", startsAt: "+15 days", capacity: 2 }` → HTTP 201 Created with status `"DRAFT"`.
+  3. **Event Publication:** Organizer sends `POST /api/events/:id/publish` → HTTP 200 OK, event status transitions to `"PUBLISHED"`.
+  4. **Organizer Logout:** `POST /api/auth/logout` → HTTP 204.
+  5. **Participant Login:** `POST /api/auth/login` with `participant1@example.test` → HTTP 200.
+  6. **Browse Events:** Participant calls `GET /api/events` → HTTP 200; the newly published event appears with `remainingPlaces: 2` and `confirmedCount: 0`.
+  7. **Registration:** Participant calls `POST /api/events/:id/registrations` → HTTP 201 Created, returning `{ id, eventId, status: "CONFIRMED", createdAt }`.
+  8. **Consult My Registrations:** Participant calls `GET /api/registrations` → HTTP 200, returning the confirmed registration linked to "E2E Grand Hackathon".
+  9. **Consult Registration Detail:** Participant calls `GET /api/registrations/:id` → HTTP 200 with matching event title and status.
+  10. **Organizer Checks Attendee List:** Organizer logs back in, calls `GET /api/events/:id/registrations` → HTTP 200, `confirmedCount: 1`, registrations array contains participant's email `participant1@example.test` and registration timestamp.
 - **Expected Result:** Entire workflow succeeds across UI/API and database layer; state persists accurately.
 - **Actual Result:** **PASS** (duration 468ms in E2E Playwright run).
+
+#### Execution Capture — Scenario 1 (Normal Domain Lifecycle):
+![Scenario 1: Complete Normal Domain Journey](./evidence/screenshots/screenshot-demo-lifecycle.png)
 
 ---
 
 ### Scenario 2: Meaningful Business Rule and Boundary Rejections
 - **Linked Rules:** BR-01, BR-02, BR-03, BR-04, BR-05, BR-06 / AC-201, AC-209, AC-403, AC-404, AC-405
-- **Tested Release Commit:** `513b249`
+- **Tested Release Commit:** `4d90108`
 - **Step-by-step Demonstration:**
-  1. **Capacity $le$ 0 (BR-01):** Organizer attempts `POST /api/events` with `capacity: 0`.  
+  1. **Capacity <= 0 (BR-01):** Organizer attempts `POST /api/events` with `capacity: 0`.  
      *Result:* HTTP 400 Bad Request with `{ "error": { "code": "VALIDATION_ERROR", "message": "Invalid event data" } }`. Database `CHECK (capacity > 0)` also protects data integrity.
   2. **Past Publication Date (BR-02):** Organizer attempts to publish an event dated yesterday.  
      *Result:* HTTP 409 Conflict with `{ "error": { "code": "EVENT_IN_PAST", "message": "The event date is not in the future" } }`.
@@ -937,11 +940,14 @@ Command: npm test and npm run test:e2e. Recorded in Part F: test output, tested 
 - **Expected Result:** Every business rule strictly enforced server-side; appropriate HTTP 400/409 codes returned with standard D-08 error bodies.
 - **Actual Result:** **PASS** (Verified across unit and integration suites).
 
+#### Execution Capture — Scenario 2 (Business Rule Rejections):
+![Scenario 2: Business Rule Rejections](./evidence/screenshots/screenshot-demo-rejections.png)
+
 ---
 
 ### Scenario 3: Login/Logout, Role Boundaries & Ownership Enforcement
 - **Linked Requirements:** NFR-01, NFR-06, BR-07, BR-09 / AC-102, AC-207, AC-308, AC-506, AC-603, AC-604
-- **Tested Release Commit:** `513b249`
+- **Tested Release Commit:** `4d90108`
 - **Automated Reference:** Playwright E2E Tests `TEST-114` and `E2E-03`
 - **Step-by-step Demonstration:**
   1. **Unauthenticated Access:** Client calls `GET /api/auth/me` without cookie.  
@@ -958,6 +964,9 @@ Command: npm test and npm run test:e2e. Recorded in Part F: test output, tested 
 - **Expected Result:** All endpoints enforce backend role checks (`requireAuth`, `requireRole`) and query-level ownership checks; client cannot bypass restrictions.
 - **Actual Result:** **PASS**.
 
+#### Execution Capture — Scenario 3 (Security & Role Enforcement):
+![Scenario 3: Role and Ownership Boundaries](./evidence/screenshots/screenshot-demo-security.png)
+
 ---
 
 ## 2. Build and Automated Test Results
@@ -965,36 +974,14 @@ Command: npm test and npm run test:e2e. Recorded in Part F: test output, tested 
 ### Commands and Environment
 - **Unit and Integration Test Command:** `npm test` (`vitest run`)
 - **End-to-End Test Command:** `npm run test:e2e` (`playwright test`)
-- **Tested Commit:** `513b249` (tag `v0.1.0-sprint1`)
+- **Tested Commit:** `4d90108` (tag `v0.1.0-sprint1`)
 - **Database Engine:** PostgreSQL 16 on Docker container port 5433
 
-### Execution Output Summary
-```text
-========================= VITEST INTEGRATION & UNIT SUITE =========================
- ✓ tests/integration/browse.test.ts (12 tests) 4206ms
- ✓ tests/integration/register.test.ts (12 tests) 3339ms
- ✓ tests/integration/my-registrations.test.ts (8 tests) 2756ms
- ✓ tests/integration/organizer-view.test.ts (8 tests) 2485ms
- ✓ tests/integration/auth.test.ts (18 tests) 1365ms
- ✓ tests/integration/events-manage.test.ts (16 tests) 619ms
- ✓ tests/unit/auth-unit.test.ts (5 tests) 92ms
- ✓ tests/integration/event-constraints.test.ts (1 test) 96ms
- ✓ tests/unit/event-rules.test.ts (11 tests) 10ms
- ✓ tests/unit/registration-rules.test.ts (5 tests) 6ms
- ✓ tests/unit/browse-unit.test.ts (5 tests) 7ms
+#### Screen Capture — Vitest Suite Execution (101 Tests Passed):
+![Vitest Automated Test Suite Output](./evidence/screenshots/screenshot-vitest-summary.png)
 
- Test Files  11 passed (11)
-      Tests  101 passed (101) | 0 failed | 0 skipped
-   Duration  23.37s
-
-=========================== PLAYWRIGHT E2E SUITE ===========================
-Running 3 tests using 1 worker
-  ok 1 tests/e2e/journey.spec.ts › TEST-114 / E2E-01: Authentication journey (212ms)
-  ok 2 tests/e2e/journey.spec.ts › E2E-02: Complete lifecycle (468ms)
-  ok 3 tests/e2e/journey.spec.ts › E2E-03: Security & Role boundary enforcement (334ms)
-
-  3 passed (6.1s) | 0 failed | 0 skipped
-```
+#### Screen Capture — Playwright End-to-End User Journeys (3 Scenarios Passed):
+![Playwright E2E Suite Output](./evidence/screenshots/screenshot-playwright-e2e.png)
 
 ### Comprehensive AC to Test Results Mapping
 | AC ID | Planned TEST ID | Implementation Test File | Type | Result |
@@ -1050,6 +1037,11 @@ test("TEST-411 / AC-409 / NFR-03: 20 simultaneous requests for the last place", 
 });
 ```
 
+#### Execution Capture — Concurrency Proof (TEST-411 / NFR-03):
+![NFR-03 Concurrency Test Run (TEST-411)](./evidence/screenshots/screenshot-concurrency-nfr03.png)
+
+---
+
 ### Excerpt 2: Role and Ownership Restriction (TEST-603 / TEST-604)
 *File:* `tests/integration/organizer-view.test.ts`  
 *Purpose:* Proves that another organizer receives a 404 with zero leaked participant data, and participants receive a 403.
@@ -1093,44 +1085,61 @@ In accordance with DoD item 3, every feature began with a failing test commit (R
 
 ---
 
-## 5. Engineering Workflow and Peer Review Evidence
+## 5. Non-Functional Requirements Verification Proofs
+
+### NFR-04: Data Persistence Across Restarts
+Procedure: Seed database, record before-counts, restart PostgreSQL container, verify after-counts.
+
+#### Screen Capture — NFR-04 Data Persistence Verification:
+![NFR-04 Restart & Persistence Verification](./evidence/screenshots/screenshot-persistence-nfr04.png)
+
+### NFR-05: Secret Isolation (No .env in Git)
+Command executed: `git ls-files | grep '\.env'`  
+Output: `.env.example` only. No real credentials or database passwords committed.
+
+---
+
+## 6. Engineering Workflow and Peer Review Evidence
 
 All development was executed through dedicated Git branches and thoroughly reviewed pull requests into `sprint-1`, followed by a reviewed release PR into `main`.
 
+#### Screen Capture — GitHub Pull Requests & Release Status:
+![GitHub PRs Integration and Release Tag](./evidence/screenshots/screenshot-github-prs.png)
+
 ### Sampled Pull Request 1: PR #15 (F-01 Authentication)
-- **Branch:** `feature/F-01-auth` $ightarrow$ `sprint-1`
-- **Author:** Imanol Labarrere (B) | **Reviewer:** Xavier Gobert (A)
+- **Branch:** `feature/F-01-auth` → `sprint-1`
+- **Author:** Imanol Labarrere (Student B) | **Reviewer:** Xavier Gobert (Student A)
 - **Review Finding & Check:**
   > *"Verified that `requireAuth` reads only from the httpOnly cookie and that session expiry deletes the row in the DB. Timing-safe argon2 verify properly handles dummy hash. Approved."*
 - **Outcome:** Merged into `sprint-1` (commit `3a0f5aa`).
 
 ### Sampled Pull Request 2: PR #20 (F-04 Register & Concurrency Lock)
-- **Branch:** `feature/F-04-register` $ightarrow$ `sprint-1`
-- **Author:** Xavier Gobert (A) | **Reviewer:** Imanol Labarrere (B)
+- **Branch:** `feature/F-04-register` → `sprint-1`
+- **Author:** Xavier Gobert (Student A) | **Reviewer:** Imanol Labarrere (Student B)
 - **Substantive Review Finding:**
   > *"Verified row-level lock: `SELECT ... FOR UPDATE` runs before reading confirmedCount, serializing concurrent transactions and satisfying NFR-03. Priority order in `decideRegistration` respects PAST > DUPLICATE > FULL. Non-blocking observation: Prisma transaction timeout (10s) protects against deadlocks; in a follow-up, Prisma error P2024 could be mapped to 503 instead of generic 500. Approved."*
 - **Outcome:** Merged into `sprint-1` (commit `d8977a1`).
 
 ### Release PRs: PR #23 & PR #24
-- **Base:** `main` $leftarrow$ **Head:** `sprint-1`
-- **Reviewer:** Xavier Gobert (A)
+- **Base:** `main` ← **Head:** `sprint-1`
+- **Reviewer:** Xavier Gobert (Student A)
 - **Result:** Successfully approved and merged into `main`. Tagged `v0.1.0-sprint1`.
 
 ---
 
-## 6. Team Contributions Table
+## 7. Team Contributions Table
 
 | Area | Student A (Xavier Gobert — `hoshiiiix`) | Student B (Imanol Labarrere — `ImanolLabarrere`) |
 |---|---|---|
 | **Specifications** | Authored contracts: F-02, F-04, F-05, and DoD v1.0 | Authored baseline SRS, SDS, contracts F-01, F-03, F-06, traceability |
 | **Development** | Implemented F-02 (Events) and F-04 (Register with concurrency row lock) | Implemented project skeleton, DB schema/migrations, F-01 (Auth), F-03 (Browse), F-05 (My Regs), F-06 (Org View) |
 | **Testing** | Authored unit & integration tests for F-02 and F-04 (including TEST-411) | Authored unit & integration tests for F-01, F-03, F-05, F-06; authored Playwright E2E suite |
-| **Code Review** | Relue et approuvé PR #10, PR #11, PR #15, PR #16, PR #17, PR #21, PR #22, PR #23, PR #24 | Relue et approuvé PR #12, PR #13, PR #14, PR #18, PR #19, PR #20 |
+| **Code Review** | Reviewed and approved PR #10, PR #11, PR #15, PR #16, PR #17, PR #21, PR #22, PR #23, PR #24 | Reviewed and approved PR #12, PR #13, PR #14, PR #18, PR #19, PR #20 |
 | **Operations** | Authored README local setup & test DB guide | Executed Docker persistence test (NFR-04), Git secret check (NFR-05), release tagging |
 
 ---
 
-## 7. AI-Use Declaration
+## 8. AI-Use Declaration
 In compliance with course requirements:
 - **AI Tool Used:** Google Antigravity (Claude Sonnet 4.6 & Gemini 3.8 Flash).
 - **Scope of AI Assistance:** Used as an interactive pair programming partner for generating test fixtures, drafting TypeScript boilerplate and types, assisting in git conflict resolution, and formatting Markdown tables.
@@ -1138,14 +1147,14 @@ In compliance with course requirements:
 
 ---
 
-## 8. Known Incomplete Work and Limitations
+## 9. Known Incomplete Work and Limitations
 - **Current Scope:** Sprint 1 scope is 100% complete. All planned 101 unit/integration tests and 3 E2E journeys pass without failures or skips.
 - **Frontend UI:** In Sprint 1, user journeys are exercised through Playwright API end-to-end scenarios; the full React/Vite single-page application is scheduled for development in Sprint 2.
 - **Upcoming Features (Sprint 2):** Registrations cannot yet be cancelled (F-07), and the 20% waiting list (F-08) is deferred to Sprint 2 as planned in the 3-sprint roadmap.
 
 ---
 
-## 9. Reproduction Instructions (Quick Setup)
+## 10. Reproduction Instructions (Quick Setup)
 For the TA or instructor evaluating this submission:
 
 ```bash
