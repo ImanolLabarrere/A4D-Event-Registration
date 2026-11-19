@@ -57,14 +57,16 @@ authRouter.post("/login", async (req, res) => {
     expires: expiresAt,
   });
 
-  res.status(200).json({ id: user.id, email: user.email, role: user.role });
+  res.status(200).json({ id: user.id, email: user.email, role: user.role, token });
 });
 
 // ---------------------------------------------------------------------------
 // POST /api/auth/logout
 // ---------------------------------------------------------------------------
 authRouter.post("/logout", async (req, res) => {
-  const token: string | undefined = req.cookies?.[COOKIE_NAME];
+  const authHeader = req.headers.authorization;
+  const bearerToken = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : undefined;
+  const token: string | undefined = req.cookies?.[COOKIE_NAME] ?? bearerToken;
   if (token) {
     await db.session.delete({ where: { id: token } }).catch(() => {});
   }

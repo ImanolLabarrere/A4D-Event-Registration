@@ -11,9 +11,17 @@ async function main() {
   if (!password) {
     throw new Error("SEED_PASSWORD is not set (see .env.example)");
   }
+
+  // Guard: if database already contains data and FORCE_SEED is not true, do not wipe
+  const existingUserCount = await prisma.user.count();
+  if (existingUserCount > 0 && process.env.FORCE_SEED !== "true") {
+    console.log(`Database already seeded (${existingUserCount} users present). Skipping seed to preserve data.`);
+    return;
+  }
+
   const passwordHash = await argon2.hash(password);
 
-  // Le seed est rejouable : on repart d'une base de démo propre.
+  // Safe replay when empty or when FORCE_SEED=true
   await prisma.registration.deleteMany();
   await prisma.event.deleteMany();
   await prisma.session.deleteMany();
@@ -44,7 +52,7 @@ async function main() {
     ],
   });
 
-  console.log("Seed OK : 2 organisateurs, " + participants.length + " participants, 4 evenements.");
+  console.log("Seed OK: 2 organizers, " + participants.length + " participants, 4 events.");
 }
 
 main()
