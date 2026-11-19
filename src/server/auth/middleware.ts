@@ -33,10 +33,12 @@ export function requireRoleFn(
 }
 
 // ---------------------------------------------------------------------------
-// requireAuth middleware — reads the session from the cookie
+// requireAuth middleware — reads the session from the cookie or Authorization header
 // ---------------------------------------------------------------------------
 export async function requireAuth(req: Request, res: Response, next: NextFunction) {
-  const token: string | undefined = req.cookies?.sid;
+  const authHeader = req.headers.authorization;
+  const bearerToken = authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : undefined;
+  const token: string | undefined = req.cookies?.sid ?? bearerToken;
   if (!token) {
     res.status(401).json({ error: { code: "UNAUTHENTICATED", message: "Authentication required." } });
     return;
