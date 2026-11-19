@@ -7,7 +7,7 @@ const prisma = new PrismaClient();
 const DAY = 24 * 60 * 60 * 1000;
 
 async function main() {
-  const password = process.env.SEED_PASSWORD;
+  const password = process.env.SEED_PASSWORD ?? process.env.ADMIN_PASSWORD ?? process.env.DEMO_USER_PASSWORD;
   if (!password) {
     throw new Error("SEED_PASSWORD is not set (see .env.example)");
   }

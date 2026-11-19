@@ -13,7 +13,8 @@
     "test:e2e": "playwright test",
     "db:migrate": "prisma migrate dev",
     "db:migrate:deploy": "prisma migrate deploy",
-    "db:seed": "tsx src/server/db/seed.ts"
+    "db:seed": "tsx src/server/db/seed.ts",
+    "prisma:seed": "tsx src/server/db/seed.ts"
   },
   "repository": {
     "type": "git",

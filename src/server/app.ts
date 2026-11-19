@@ -32,6 +32,14 @@ app.get("/api/ready", async (_req, res) => {
   }
 });
 
+app.get("/api/categories", (_req, res) => {
+  res.status(200).json([
+    { id: 1, name: "Conferences" },
+    { id: 2, name: "Workshops" },
+    { id: 3, name: "Hackathons" },
+  ]);
+});
+
 app.get("/", (_req, res) => {
   res.status(200).send(`<!DOCTYPE html>
 <html lang="en">
