@@ -1,0 +1,14 @@
+**/node_modules
+**/dist
+**/build
+**/.env
+*.log
+.git
+.gitignore
+test-results
+playwright-report
+*.db
+*.sqlite
+gha-creds-*.json
+docs/deliverable-*.pdf
+docs/FinalProject-*.pdf

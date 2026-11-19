@@ -1,13 +1,57 @@
 services:
   db:
-    image: postgres:16
+    image: postgres:16-alpine
+    container_name: a4d-db
+    restart: unless-stopped
     environment:
-      POSTGRES_USER: a4d
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: a4d
+      POSTGRES_USER: ${POSTGRES_USER:-a4d}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-a4dpassword}
+      POSTGRES_DB: ${POSTGRES_DB:-a4d}
     ports:
-      - "5433:5432"
+      - "5432:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-a4d} -d ${POSTGRES_DB:-a4d}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: a4d-migrate
+    restart: "no"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-a4d}:${POSTGRES_PASSWORD:-a4dpassword}@db:5432/${POSTGRES_DB:-a4d}?schema=public
+      SEED_PASSWORD: ${SEED_PASSWORD:-DemoInitial123!}
+      FORCE_SEED: ${FORCE_SEED:-false}
+    command: ["sh", "-c", "npx prisma migrate deploy && npm run db:seed"]
+
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: a4d-server
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    environment:
+      NODE_ENV: production
+      TZ: Asia/Bangkok
+      PORT: 3000
+      DATABASE_URL: postgresql://${POSTGRES_USER:-a4d}:${POSTGRES_PASSWORD:-a4dpassword}@db:5432/${POSTGRES_DB:-a4d}?schema=public
+      SEED_PASSWORD: ${SEED_PASSWORD:-DemoInitial123!}
+    ports:
+      - "3000:3000"
+
 volumes:
-  pgdata:
+  postgres_data:
