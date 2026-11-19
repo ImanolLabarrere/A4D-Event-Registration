@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # ==============================================================================
-# TokTickIT — Google Cloud Run & Cloud SQL Teardown Script
+# A4D Event Registration — Google Cloud Run & Cloud SQL Teardown Script
 # ==============================================================================
 # Usage:
 #   ./deploy/teardown.sh
@@ -54,19 +54,19 @@ fi
 # ------------------------------------------------------------------------------
 # Resource names (CHANGE ME: must match deploy/deploy.sh)
 # ------------------------------------------------------------------------------
-REPO_NAME="toktickit"
-SQL_INSTANCE="toktickit-pg"
-SERVICE_NAME="toktickit"
-MIGRATE_JOB_NAME="toktickit-migrate"
-SA_NAME="toktickit-runner"
+REPO_NAME="a4d-events"
+SQL_INSTANCE="a4d-events-pg"
+SERVICE_NAME="a4d-events"
+MIGRATE_JOB_NAME="a4d-events-migrate"
+SA_NAME="a4d-events-runner"
 SA_EMAIL="${SA_NAME}@${PROJECT_ID}.iam.gserviceaccount.com"
 
-SECRET_DB_URL="toktickit-database-url"
-SECRET_ADMIN_PASS="toktickit-admin-password"
-SECRET_DEMO_PASS="toktickit-demo-password"
+SECRET_DB_URL="a4d-events-database-url"
+SECRET_ADMIN_PASS="a4d-events-admin-password"
+SECRET_DEMO_PASS="a4d-events-demo-password"
 
 echo "=================================================================="
-echo "WARNING: This will permanently delete TokTickIT resources in:"
+echo "WARNING: This will permanently delete A4D Event Registration resources in:"
 echo "  Project : ${PROJECT_ID}"
 echo "  Region  : ${REGION}"
 echo "Resources to be deleted:"
