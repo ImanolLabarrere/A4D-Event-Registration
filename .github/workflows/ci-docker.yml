@@ -1,0 +1,89 @@
+# ##############################################################################
+# CI — "CI & Docker Build"
+# ##############################################################################
+# WHAT THIS WORKFLOW DOES
+#   Runs the project's checks and is used in two ways:
+#     1) directly on every pull request to `main` and `staging` (and manually), and
+#     2) as a REUSABLE workflow called by deploy.yml (`workflow_call`) so the
+#        deploy only starts after these checks pass.
+#   Steps: offline deploy-script tests -> backend tests (real PostgreSQL service)
+#          -> verify the production Dockerfile builds.
+#   It does NOT deploy anything.
+#
+# ⚠️ DO NOT RENAME (the lab guide refers to these names):
+#   - job id : test-and-docker
+# ##############################################################################
+
+name: CI & Docker Build
+
+on:
+  workflow_call:
+  pull_request:
+    branches: [main, staging]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test-and-docker:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: a4d
+          POSTGRES_PASSWORD: a4dpassword
+          POSTGRES_DB: a4d
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "22"
+
+      - name: Setup Python 3.12
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+
+      - name: Check deployment scripts without accessing GCP
+        run: |
+          bash -n deploy/deploy.sh deploy/teardown.sh deploy/release.sh
+          bash deploy/tests/test_deploy_stub.sh
+          bash deploy/tests/test_release_stub.sh
+          python3 -m unittest discover -s deploy/tests -p 'test_smoke.py'
+
+      - name: Install & Test Application (Prisma Migrate + Seed + Vitest)
+        env:
+          DATABASE_URL: postgresql://a4d:a4dpassword@localhost:5432/a4d?schema=public
+          DATABASE_URL_TEST: postgresql://a4d:a4dpassword@localhost:5432/a4d?schema=public
+          SEED_PASSWORD: TestSeedPassword123!
+          FORCE_SEED: "true"
+        run: |
+          npm ci
+          npx prisma migrate deploy
+          npm run prisma:seed
+          npm test
+
+      - name: Verify Production Dockerfile Build
+        run: |
+          docker build -t a4d-events:latest .
