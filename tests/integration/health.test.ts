@@ -6,7 +6,8 @@ import { db } from "../../src/server/db/client";
 describe("Cloud-Ready Health & Readiness Probes (Episode 2)", () => {
   it("GET /api/health returns 200 ok", async () => {
     const res = await request(app).get("/api/health");
-    expect(res.status).toBe(200);
+    // INTENTIONALLY BROKEN FOR C-02 QUALITY GATE PROOF
+    expect(res.status).toBe(999);
     expect(res.body).toEqual({ status: "ok" });
   });
 
